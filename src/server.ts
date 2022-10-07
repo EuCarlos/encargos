@@ -6,7 +6,7 @@ import swaggerDocsV1 from './docs/v1/swagger.json'
 require("dotenv").config()
 
 // controllers
-import '@controllers/UsersController'
+import '@controllers/v1/UsersController'
 
 // routes
 const v1Router = require('./routes/v1')

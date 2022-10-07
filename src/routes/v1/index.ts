@@ -4,6 +4,8 @@ var bodyParser = require('body-parser')
 
 import { JsonResponse } from '../../concerns/response'
 
+import EncargoController from '@controllers/v1/EncargoController'
+
 router
     .use(bodyParser.urlencoded({ extended: false }))
     .use(bodyParser.json())
@@ -18,9 +20,8 @@ router
         return res.status(200).json(result)
     })
 
-    .post('/', (req, res) => {
-        var result = new JsonResponse("Request Successfully", true, req.body)
-        res.status(201).json(result)
-    })
+    .get('/encargos/:id', (req, res) => EncargoController.show)
+    .get('/encargos', (req, res) => EncargoController.index)
+    .post('/encargos', (req, res) => EncargoController.create)
 
 module.exports = router
