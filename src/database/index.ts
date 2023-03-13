@@ -1,3 +1,9 @@
-import { createConnection } from 'typeorm'
+import { createConnection, getConnectionOptions } from 'typeorm'
+require("dotenv").config()
 
-createConnection()
+const getDBConnection =async () => {
+  const connectionOptions = await getConnectionOptions(process.env.NODE_ENV);
+  await createConnection({...connectionOptions, name:"default"});
+}
+
+getDBConnection()
