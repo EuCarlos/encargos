@@ -5,7 +5,7 @@ import EncargoController from '@controllers/v1/EncargoController'
 
 router
     .post('/', EncargoController.create)
-    .get('/', EncargoController.index)
-    .get('/:id', EncargoController.show)
+    .get('/', EncargoController.show)
+    .get('/:encargoId', EncargoController.index)
 
 module.exports = router
