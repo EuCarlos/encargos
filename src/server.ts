@@ -4,12 +4,13 @@ import { print } from './routes/functions/printPaths'
 import swaggerUI from 'swagger-ui-express'
 import swaggerDocsV1 from './docs/v1/swagger.json'
 require("dotenv").config()
-
-// controllers
-import '@controllers/v1/UsersController'
+import 'reflect-metadata'
+import './database'
+var bodyParser = require('body-parser')
 
 // routes
 const v1Router = require('./routes/v1')
+const v1Encargos = require('./routes/v1/encargos.routes')
 
 import { JsonResponse } from './concerns/response'
 
@@ -18,8 +19,12 @@ const PORT = process.env.PORT || 3333
 const app = express();
 
 app
+    .use(bodyParser.urlencoded({ extended: false }))
+    .use(bodyParser.json())
+
     .use("/api/v1/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocsV1 ))
     .use('/api/v1/workouts', v1Router)
+    .use('/api/v1/encargos', v1Encargos)
 
     .use((req, res) => {
         const pathname = req.originalUrl

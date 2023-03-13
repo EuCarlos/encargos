@@ -8,10 +8,10 @@ class EncargoController {
 
     const { nome_funcionario, funcao, proventos } = req.body
 
-    const existsEncargo = await encargoRepository.findOne({ nome_funcionario })
+    const existsFuncionario = await encargoRepository.findOne({ nome_funcionario })
 
-    if (existsEncargo) {
-        return res.status(400).json({message:'Encargo already exists!', isSuccess: false})
+    if (existsFuncionario) {
+     return res.status(400).json({message:'Funcionario already exists!', isSuccess: false})
     }
 
     const encargo = encargoRepository.create({
