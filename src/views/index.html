@@ -38,24 +38,15 @@
         .modal:target { visibility: visible; opacity: 1; pointer-events: auto; }
         .modal > div { width: 65rem; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 2.2em; background: #fff; }
         .buttons-modal { margin-top: 4rem; }
-        
-        .close {
-            color: #2b2d42;
-            line-height:45px;
-            font-size: 22px;
-            position: absolute;
-            right: 0;
-            text-align: center;
-            top: 0;
-            width: 70px;
-            text-decoration: none;
-            transition: all 0.5s;
-        }   
+        .close { color: #2b2d42; line-height:45px; font-size: 22px; position: absolute; right: 0; text-align: center; top: 0; width: 70px; text-decoration: none; transition: all 0.5s; }   
         .modal h1 { font-family: 'Roboto', sans-serif; font-weight: 500; font-size: 36px; color: #2b2d42; }
         .buttons.dark-blue { padding: .5rem 3rem; border-radius: 7px; }
         .flex-forms { display: flex; flex-direction: column; }
         .grid-forms { display: flex; flex-direction: column; justify-content: center; gap: 10px; }
         label { font-size: 1.5rem; padding-bottom: .2rem; }
+        .message { gap: .7rem; color: #fff; display: flex; justify-content: end; padding: 1rem; position: absolute; top: 1rem; right: 1rem; border-radius: 5px; }
+        .message.sucess { background: #5cb85c; }
+        .message.alert { background: #d9534f; }
     </style>
 </head>
 <body>
@@ -68,6 +59,8 @@
     <div class="content_wrapper">
         <ul id="content"></ul>
     </div>
+
+    <div id="notification"></div>
 
     <!-- MODAL -->
     <div class="modal" id="ative-modal">
@@ -138,22 +131,37 @@
             axios.delete(`${LOCATION}/api/v1/encargos/${id}`)
                 .then(response => {
                     document.getElementById(id).remove()
-                    notification(response.data.message)
+                    notification(response.data.message, true)
                 })
                 .catch(error => {
-                    console.log(error);
+                    notification(error, false);
                 })
         }
 
-        const notification = (message) => {
-            alert(message)
+        const notification = (message, isSuccessful = true) => {
+            var content, id = "idNotification";
+            if(isSuccessful) {
+                content = `
+                <div class="message sucess" id="${id}">
+                    <div class="message_icon"><i class="fas fa-thumbs-up"></i></div>
+                    <div class="content_message">${message}</div>
+                </div>  
+                `
+            } else {
+                content = `
+                <div class="message alert" id="${id}">
+                    <div class="message_icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="content_message">${message}</div>
+                </div>
+                `
+            }
+            CONTENT.insertAdjacentHTML("beforeend", content)
+            setTimeout(() => document.getElementById(id).remove(), 5000)
         }
 
         const create = () => {
 
         }
-
-
     </script>
 </body>
 </html>
