@@ -23,7 +23,7 @@ class EncargoController {
 
     await encargoRepository.save(encargo)
 
-    return res.status(201).json({message:'Encargo created successfully!', isSuccess: true, data: encargo})
+    return res.status(201).json({ message:'Encargo created successfully!', isSuccess: true, data: encargo })
   }
 
   async index(req: Request, res: Response) {
@@ -51,10 +51,11 @@ class EncargoController {
 
     if(!encargos) return res.json({ message:'Successful operation!', isSuccess: true })
 
-    const results = encargos.map(({ id, nome_funcionario, proventos }) => {
+    const results = encargos.map(({ id, nome_funcionario, funcao, proventos }) => {
       return {
         id: id,
         funcionario: nome_funcionario,
+        funcao: funcao,
         proventos: proventos,
         inss: proventos * 20 / 100, 
         sat_rat: proventos * 1 / 100,
@@ -74,6 +75,34 @@ class EncargoController {
     // const results = encargos.map(props => Encargos.execute(props));
 
     return res.json({ message:'Successful operation!', isSuccess: true, data: results })
+  }
+
+  async update(req: Request, res: Response) {
+    const encargoRepository = getCustomRepository(EncargoRepository)
+    const { encargoId } = req.params;
+    const updateProperty = req.body
+
+    const existsFuncionario = await encargoRepository.findOne({ id: encargoId })
+
+    if (!existsFuncionario) {
+     return res.status(400).json({ message:'Non-existent employee!', isSuccess: false })
+    }
+
+    await encargoRepository.update(encargoId, {
+      ...existsFuncionario, // existing fields
+      ...updateProperty // updated fields
+    })
+
+    return res.json({ message:'Successful operation!', isSuccess: true })
+  }
+
+  async destroy(req: Request, res: Response) {
+    const { encargoId } = req.params;
+    const encargoRepository = getCustomRepository(EncargoRepository)
+
+    await encargoRepository.delete(encargoId)
+
+    return res.json({ message:'Successful operation!', isSuccess: true })
   }
 }
 

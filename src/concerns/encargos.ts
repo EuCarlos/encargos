@@ -1,8 +1,9 @@
 export class Encargos {
-    public static execute({ id, nome_funcionario, proventos }) {
+    public static execute({ id, nome_funcionario, funcao, proventos }) {
         return {
             id: id,
             funcionario: nome_funcionario,
+            funcao: funcao,
             proventos: proventos,
             inss: proventos * 20 / 100, 
             sat_rat: proventos * 1 / 100,
