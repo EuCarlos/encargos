@@ -1,5 +1,5 @@
 // imports
-import express from 'express'
+import express, { Request, Response } from 'express'
 import { print } from './routes/functions/printPaths'
 import swaggerUI from 'swagger-ui-express'
 import swaggerDocsV1 from './docs/v1/swagger.json'
@@ -21,6 +21,10 @@ const app = express();
 app
     .use(bodyParser.urlencoded({ extended: false }))
     .use(bodyParser.json())
+
+    .get('/', (req: Request, res: Response) => {
+        res.sendFile(__dirname + "/views/index.html")
+    })
 
     .use("/api/v1/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocsV1 ))
     .use('/api/v1/workouts', v1Router)
