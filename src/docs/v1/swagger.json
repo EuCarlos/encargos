@@ -1,77 +1,51 @@
 {
-    "openapi": "3.0.3",
-    "info": {
-      "title": "Boilerplate Typescript",
-      "description": "This is documentation created with OpenAPI 3.0 for projects created with Boilerplate. You can discover more projects at [https://carlosalves.now.sh](https://carlosalves.now.sh).",
-      "termsOfService": "https://github.com/EuCarlos/boilerplate-ts",
-      "contact": {
-        "email": "carlosalves369m@pm.me"
-      },
-      "license": {
-        "name": "MIT License",
-        "url": "https://opensource.org/licenses/MIT"
-      },
-      "version": "1.0.0"
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Encargos (API)",
+    "description": "This is documentation created with OpenAPI 3.0 for projects created with Boilerplate. You can discover more projects at [https://carlosalves.now.sh](https://carlosalves.now.sh).",
+    "termsOfService": "https://github.com/EuCarlos/encargos",
+    "contact": {
+      "email": "carlosalves369m@pm.me"
     },
-    "externalDocs": {
-      "description": "Find out more about this project",
-      "url": "https://carlosalves.now.sh"
+    "license": {
+      "name": "MIT License",
+      "url": "https://opensource.org/licenses/MIT"
     },
-    "servers": [
-      {
-        "url": "https://localhost:3000/api/v1"
-      }
-    ],
-    "tags": [
-      {
-        "name": "workouts",
-        "description": "Everything about your workouts"
-      }
-    ],
-    "paths": {
-      "/workouts": {
-        "get": {
-          "tags": [
-            "workouts"
-          ],
-          "summary": "Some information from the author",
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/ApiResponse"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "post": {
-          "tags": [
-            "workouts"
-          ],
-          "summary": "Returns the body sent",
-          "requestBody": {
-            "description": "Insert any body",
+    "version": "1.0.0"
+  },
+  "externalDocs": {
+    "description": "Find out more about this project",
+    "url": "https://carlosalves.now.sh"
+  },
+  "servers": [
+    {
+      "url": "https://localhost:3000/api/v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Workouts",
+      "description": "Everything about your workouts"
+    },
+    {
+      "name": "Encargos",
+      "description": "Everything about \"Encargos\""
+    }
+  ],
+  "paths": {
+    "/workouts": {
+      "get": {
+        "tags": [
+          "Workouts"
+        ],
+        "summary": "Some information from the author",
+        "responses": {
+          "200": {
+            "description": "successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DataGet"
-                }
-              }
-            },
-            "required": true
-          },
-          "responses": {
-            "201": {
-              "description": "Successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/ApiResponse"
-                  }
+                  "$ref": "#/components/schemas/ApiResponse"
                 }
               }
             }
@@ -79,45 +53,562 @@
         }
       }
     },
-    "components": {
-      "schemas": {
-        "DataGet": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string",
-              "example": "Carlos Alves"
+    "/encargos": {
+      "get": {
+        "tags": [
+          "Encargos"
+        ],
+        "summary": "Get list of all existing \"Encargos\"",
+        "description": "Get a list of all existing \"Encargos\" along with all the necessary information.",
+        "responses": {
+          "200": {
+            "description": "Successful operation - Lists all existing \"Encargos\", if there are no \"Encargo\" the array will be empty.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetEncargos"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Encargos"
+        ],
+        "summary": "Create a new \"Encargo\"",
+        "description": "Creates a new \"Encargo\" informing the name of the employee, the function and the salary.",
+        "requestBody": {
+          "description": "Inserts the employee's name, function and salary in the body.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EncargoData"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation - When created via the POST method, it returns the data sent to the database with the id and the time of creation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EncargoDataCreated"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - If there is already an employee with the same name entered, it returns a 400 error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EncargoDataAlreadyExists"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/encargos/{encargoId}": {
+      "get": {
+        "tags": [
+          "Encargos"
+        ],
+        "summary": "Get an existing \"Encargo\"",
+        "description": "Get just an existing \"Encargo\" along with all the necessary information.",
+        "operationId": "getOnlyEncargo",
+        "parameters": [
+          {
+            "name": "encargoId",
+            "in": "path",
+            "description": "ID of \"Encargo\"",
+            "required": true,
+            "schema": {
+              "type": "string"
             },
-            "repo": {
-              "type": "string",
-              "example": "https://github.com/EuCarlos/boilerplate-ts"
+            "example": "ff642ad0-cea6-4e81-bec7-dbdc3e161551"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation - Get only an \"Encargo\"",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetOnlyEncargo"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - If the id is wrong or there is no data with the given id, it returns a 404 error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetOnlyEncargoNotFound"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Encargos"
+        ],
+        "summary": "Update a \"Encargo\"",
+        "description": "Update a \"Encargo\".",
+        "operationId": "updateEncargo",
+        "parameters": [
+          {
+            "name": "encargoId",
+            "in": "path",
+            "description": "ID of \"Encargo\"",
+            "required": true,
+            "schema": {
+              "type": "string"
             },
-            "website": {
-              "type": "string",
-              "example": "https://carlosalves.vercel.app/"
+            "example": "aef47043-c209-4578-a2be-73e11fb95b8c"
+          }
+        ],
+        "requestBody": {
+          "description": "Inform in the object which data will be changed. data that can be changed are \"nome_funcionario\", \"funcao\" and/or \"proventos\".",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataPut"
+              }
             }
           }
         },
-        "ApiResponse": {
-          "required": [
-            "name",
-            "photoUrls"
-          ],
-          "type": "object",
-          "properties": {
-            "message": {
-              "type": "string",
-              "example": "Request Successfully"
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SucessOperation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - returns error if there is no employee with the id given in the path.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataPutNonExists"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Encargos"
+        ],
+        "summary": "Deletes a \"Encargo\"",
+        "description": "Deletes a \"Encargo\" by id",
+        "operationId": "deleteEncargo",
+        "parameters": [
+          {
+            "name": "encargoId",
+            "in": "path",
+            "description": "ID of \"Encargo\"",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "string"
             },
-            "is_success": {
-              "type": "boolean",
-              "example": true
-            },
-            "data": {
-              "$ref": "#/components/schemas/DataGet"
+            "example": "aef47043-c209-4578-a2be-73e11fb95b8c"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SucessOperation"
+                }
+              }
             }
           }
         }
       }
     }
+  },
+  "components": {
+    "schemas": {
+      "DataGet": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Carlos Alves"
+          },
+          "repo": {
+            "type": "string",
+            "example": "https://github.com/EuCarlos/encargos"
+          },
+          "website": {
+            "type": "string",
+            "example": "https://carlosalves.vercel.app/"
+          }
+        }
+      },
+      "ApiResponse": {
+        "required": [
+          "name",
+          "photoUrls"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Request Successfully"
+          },
+          "is_success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/DataGet"
+          }
+        }
+      },
+      "SucessOperation": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Successful operation!"
+          },
+          "isSuccess": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "GetEncargos": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Successful operation!"
+          },
+          "isSuccess": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "example": [
+                {
+                  "id": "ff642ad0-cea6-4e81-bec7-dbdc3e161551",
+                  "funcionario": "Carlos Alves",
+                  "funcao": "Desenvolvedor web",
+                  "proventos": 5000,
+                  "inss": 1000,
+                  "sat_rat": 50,
+                  "salario_educacao": 125,
+                  "sistema_s": 165,
+                  "ferias_e_abono": 555.5,
+                  "fgts": 400,
+                  "decimo_terceiro": 416.5,
+                  "descanso_semanal_remunerado": 1000,
+                  "total_de_encargos_com_salario": 8712
+                },
+                {
+                  "id": "06728f1a-6b76-434d-b258-6e4ad88024fc",
+                  "funcionario": "Pamela",
+                  "funcao": "Administração de Empresas",
+                  "proventos": 3040,
+                  "inss": 608,
+                  "sat_rat": 30.4,
+                  "salario_educacao": 76,
+                  "sistema_s": 100.32,
+                  "ferias_e_abono": 337.74,
+                  "fgts": 243.2,
+                  "decimo_terceiro": 253.23,
+                  "descanso_semanal_remunerado": 608,
+                  "total_de_encargos_com_salario": 5296.89
+                },
+                {
+                  "id": "e96cabc5-dac1-424c-95df-3f7e5cbb1592",
+                  "funcionario": "Marcos Antonio",
+                  "funcao": "Mercadólogo",
+                  "proventos": 4612.63,
+                  "inss": 922.52,
+                  "sat_rat": 46.12,
+                  "salario_educacao": 115.31,
+                  "sistema_s": 152.21,
+                  "ferias_e_abono": 512.46,
+                  "fgts": 369.01,
+                  "decimo_terceiro": 384.23,
+                  "descanso_semanal_remunerado": 922.52,
+                  "total_de_encargos_com_salario": 8037.04
+                },
+                {
+                  "id": "8eff7553-6267-4d40-844d-0981455abe6f",
+                  "funcionario": "Flavia Alessandra",
+                  "funcao": "Gerente de Plan. Estratégico",
+                  "proventos": 13529,
+                  "inss": 2705.8,
+                  "sat_rat": 135.29,
+                  "salario_educacao": 338.22,
+                  "sistema_s": 446.45,
+                  "ferias_e_abono": 1503.07,
+                  "fgts": 1082.32,
+                  "decimo_terceiro": 1126.96,
+                  "descanso_semanal_remunerado": 2705.8,
+                  "total_de_encargos_com_salario": 23572.92
+                },
+                {
+                  "id": "c88ba005-ad94-47dc-97ae-1614926a2ef7",
+                  "funcionario": "Marcelo Dantas Neto",
+                  "funcao": "Contador",
+                  "proventos": 4238,
+                  "inss": 847.6,
+                  "sat_rat": 42.38,
+                  "salario_educacao": 105.95,
+                  "sistema_s": 139.85,
+                  "ferias_e_abono": 470.84,
+                  "fgts": 339.04,
+                  "decimo_terceiro": 353.02,
+                  "descanso_semanal_remunerado": 847.6,
+                  "total_de_encargos_com_salario": 7384.29
+                },
+                {
+                  "id": "b51c365e-3f83-4c87-840d-f04ca563f7d9",
+                  "funcionario": "Teste",
+                  "funcao": "Teste",
+                  "proventos": 100,
+                  "inss": 20,
+                  "sat_rat": 1,
+                  "salario_educacao": 2.5,
+                  "sistema_s": 3.3,
+                  "ferias_e_abono": 11.11,
+                  "fgts": 8,
+                  "decimo_terceiro": 8.33,
+                  "descanso_semanal_remunerado": 20,
+                  "total_de_encargos_com_salario": 174.24
+                },
+                {
+                  "id": "aef47043-c209-4578-a2be-73e11fb95b8c",
+                  "funcionario": "Teste1",
+                  "funcao": "Teste",
+                  "proventos": 100,
+                  "inss": 20,
+                  "sat_rat": 1,
+                  "salario_educacao": 2.5,
+                  "sistema_s": 3.3,
+                  "ferias_e_abono": 11.11,
+                  "fgts": 8,
+                  "decimo_terceiro": 8.33,
+                  "descanso_semanal_remunerado": 20,
+                  "total_de_encargos_com_salario": 174.24
+                }
+              ]
+            }
+          }
+        }
+      },
+      "EncargoData": {
+        "type": "object",
+        "properties": {
+          "nome_funcionario": {
+            "type": "string",
+            "example": "Marcos Antonio"
+          },
+          "funcao": {
+            "type": "string",
+            "example": "Mercadólogo"
+          },
+          "proventos": {
+            "type": "int",
+            "format": "int64",
+            "example": 4612.63
+          }
+        }
+      },
+      "EncargoDataCreated": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Encargo created successfully!"
+          },
+          "isSuccess": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "example": "ff642ad0-cea6-4e81-bec7-dbdc3e161551"
+              },
+              "nome_funcionario": {
+                "type": "string",
+                "example": "Marcos Antonio"
+              },
+              "funcao": {
+                "type": "string",
+                "example": "Mercadólogo"
+              },
+              "proventos": {
+                "type": "int",
+                "format": "int64",
+                "example": 4612.63
+              },
+              "created_at": {
+                "type": "string",
+                "format": "data",
+                "example": "2023-03-15T18:35:57.000Z"
+              }
+            }
+          }
+        }
+      },
+      "EncargoDataAlreadyExists": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Employee already exists!"
+          },
+          "isSuccess": {
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "GetOnlyEncargo": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Successful operation!"
+          },
+          "isSuccess": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "example": "ff642ad0-cea6-4e81-bec7-dbdc3e161551"
+              },
+              "funcionario": {
+                "type": "string",
+                "example": "Carlos Alves"
+              },
+              "funcao": {
+                "type": "string",
+                "example": "Desenvolvedor web"
+              },
+              "proventos": {
+                "type": "integer",
+                "example": 5000
+              },
+              "inss": {
+                "type": "integer",
+                "example": 1000
+              },
+              "sat_rat": {
+                "type": "integer",
+                "example": 50
+              },
+              "salario_educacao": {
+                "type": "integer",
+                "example": 125
+              },
+              "sistema_s": {
+                "type": "integer",
+                "example": 165
+              },
+              "ferias_e_abono": {
+                "type": "integer",
+                "example": 555.5
+              },
+              "fgts": {
+                "type": "integer",
+                "example": 400
+              },
+              "decimo_terceiro": {
+                "type": "integer",
+                "example": 416.5
+              },
+              "descanso_semanal_remunerado": {
+                "type": "integer",
+                "example": 1000
+              },
+              "total_de_encargos_com_salario": {
+                "type": "integer",
+                "example": 8712
+              }
+            }
+          }
+        }
+      },
+      "GetOnlyEncargoNotFound": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "No value found!"
+          },
+          "isSuccess": {
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "DataPut": {
+        "type": "object",
+        "properties": {
+          "nome_funcionario": {
+            "type": "string",
+            "example": "Marcelo Toledo"
+          },
+          "funcao": {
+            "type": "string",
+            "example": "Gerente de Produção"
+          },
+          "proventos": {
+            "type": "integer",
+            "format": "int64",
+            "example": 10757.64
+          }
+        }
+      },
+      "DataPutNonExists": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Non-existent employee!"
+          },
+          "isSuccess": {
+            "type": "boolean",
+            "example": false
+          }
+        }
+      }
+    }
+  }
 }

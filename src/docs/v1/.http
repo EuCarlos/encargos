@@ -1,0 +1,117 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Encargos",
+    "dateExported": "2023-03-15T12:54:59.943Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "3557a457-5d94-4693-b529-3fdd4c96cbbf",
+            "colId": "9ed5b358-15e3-423d-b5d9-9bd935901af8",
+            "containerId": "",
+            "name": "WORKOUTS",
+            "url": "http://localhost:3000/api/v1/workouts",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2023-03-13T12:38:11.778Z",
+            "modified": "2023-03-13T12:39:07.934Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "19bb4ec0-0fca-4e79-b325-5f307e996ea9",
+            "colId": "9ed5b358-15e3-423d-b5d9-9bd935901af8",
+            "containerId": "",
+            "name": "CREATE",
+            "url": "http://localhost:3000/api/v1/encargos",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-03-13T12:38:16.772Z",
+            "modified": "2023-03-14T13:21:54.052Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"nome_funcionario\": \"Teste5\", \n  \"funcao\": \"Teste\", \n  \"proventos\": 100\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "635e13e4-5c12-4388-a029-994a5a0c2c32",
+            "colId": "9ed5b358-15e3-423d-b5d9-9bd935901af8",
+            "containerId": "",
+            "name": "UPDATE",
+            "url": "http://localhost:3000/api/v1/encargos/06728f1a-6b76-434d-b258-6e4ad88024fc",
+            "method": "PUT",
+            "sortNum": 35000,
+            "created": "2023-03-13T14:15:16.674Z",
+            "modified": "2023-03-13T17:33:18.177Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"funcao\": \"Administração de Empresas\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "2ff018a7-1c10-4c88-8160-ddf02a23a5e4",
+            "colId": "9ed5b358-15e3-423d-b5d9-9bd935901af8",
+            "containerId": "",
+            "name": "INDEX",
+            "url": "http://localhost:3000/api/v1/encargos/e96cabc5-dac1-424c-95df-3f7e5cbb1592",
+            "method": "GET",
+            "sortNum": 40000,
+            "created": "2023-03-13T12:38:26.922Z",
+            "modified": "2023-03-14T11:54:53.283Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "2eed8f5c-0946-4bd0-bb32-f2c972bf1341",
+            "colId": "9ed5b358-15e3-423d-b5d9-9bd935901af8",
+            "containerId": "",
+            "name": "INDEX (Test)",
+            "url": "http://localhost:3000/api/v1/encargos",
+            "method": "GET",
+            "sortNum": 42500,
+            "created": "2023-03-15T12:10:01.291Z",
+            "modified": "2023-03-15T12:35:11.606Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "58c01221-341f-40d1-ab86-677dc3ce4760",
+            "colId": "9ed5b358-15e3-423d-b5d9-9bd935901af8",
+            "containerId": "",
+            "name": "DESTROY",
+            "url": "http://localhost:3000/api/v1/encargos/18d0b8c4-2b63-4129-b5a6-f09bc180578f",
+            "method": "DELETE",
+            "sortNum": 45000,
+            "created": "2023-03-13T13:58:50.059Z",
+            "modified": "2023-03-13T14:00:08.388Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "f249b919-4433-4102-931b-e27a75bc109f",
+            "colId": "9ed5b358-15e3-423d-b5d9-9bd935901af8",
+            "containerId": "",
+            "name": "SHOW",
+            "url": "http://localhost:3000/api/v1/encargos",
+            "method": "GET",
+            "sortNum": 50000,
+            "created": "2023-03-13T12:38:28.906Z",
+            "modified": "2023-03-13T12:46:16.450Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        }
+    ]
+}
