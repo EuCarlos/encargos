@@ -12,7 +12,7 @@ class EncargoController {
     const existsFuncionario = await encargoRepository.findOne({ nome_funcionario })
 
     if (existsFuncionario) {
-     return res.status(400).json({message:'Funcionario already exists!', isSuccess: false})
+     return res.status(400).json({message:'Employee already exists!', isSuccess: false})
     }
 
     const encargo = encargoRepository.create({
@@ -37,7 +37,7 @@ class EncargoController {
       }
     })
 
-    if(!encargo) return res.json({message:'Successful operation!', isSuccess: true})
+    if(!encargo) return res.status(404).json({message:'No value found!', isSuccess: false})
 
     const result = new ECG(encargo).get();
 
