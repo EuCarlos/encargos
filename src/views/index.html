@@ -38,6 +38,10 @@
         }
         .modal:target { visibility: visible; opacity: 1; pointer-events: auto; }
         .modal > div { width: 65rem; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 2.2em; background: #fff; }
+        .modal > div h1 { font-weight: bold;}
+        .modal > div h1 .pro { font-weight: lighter; color: #2b2d42de; font-size: 1.2rem; }
+        .modal > div table tbody { font-size: 1rem; font-size: 1rem; color: #2b2d42; }
+        .modal > div table tbody tr td:first-child { font-weight: bold; }
         .buttons-modal { margin-top: 2rem; }
         .close { color: #2b2d42; line-height:45px; font-size: 22px; position: absolute; right: 0; text-align: center; top: 0; width: 70px; text-decoration: none; transition: all 0.5s; }   
         .modal h1 { font-family: 'Roboto', sans-serif; font-weight: 500; font-size: 36px; color: #2b2d42; }
@@ -69,7 +73,9 @@
         </table>
     </div>
 
-    <div id="notification"></div>
+    <div class="modal" id="view-employee">
+        <div id="modal-viewer"></div>
+    </div>
 
     <!-- MODAL -->
     <div class="modal" id="ative-modal">
@@ -120,8 +126,7 @@
                             <td><span class="_name">${e.funcionario}</span></td>
                             <td><span class="_function">${e.funcao}</span></td>
                             <td><span class="_buttons">
-                                <button class="view" onclick="view("${e.id}")"><i class="far fa-eye"></i></button> 
-                                <button class="edit" onclick="edit('${e.id}')"><i class="fas fa-pen"></i></button> 
+                                <button class="view" onclick="view('${e.id}')"><i class="far fa-eye"></i></button> 
                                 <button class="destroy" onclick="destroy('${e.id}')"><i class="fas fa-trash"></i></button>
                             </span></td>
                         </tr>
@@ -149,21 +154,14 @@
 
         const notification = (message, isSuccessful = true) => {
             var content, id = "idNotification";
-            if(isSuccessful) {
-                content = `
-                <div class="message sucess" id="${id}">
-                    <div class="message_icon"><i class="fas fa-thumbs-up"></i></div>
+
+            content = `
+                <div class="message ${isSuccessful ? "sucess" : "alert"}" id="${id}">
+                    <div class="message_icon"><i class="fas fa-${isSuccessful ? "thumbs-up" : "exclamation-triangle"}"></i></div>
                     <div class="content_message">${message}</div>
                 </div>  
-                `
-            } else {
-                content = `
-                <div class="message alert" id="${id}">
-                    <div class="message_icon"><i class="fas fa-exclamation-triangle"></i></div>
-                    <div class="content_message">${message}</div>
-                </div>
-                `
-            }
+            `
+
             CONTENT.insertAdjacentHTML("beforeend", content)
             setTimeout(() => document.getElementById(id).remove(), 5000)
         }
@@ -183,7 +181,6 @@
                         <td><span class="_function">${e.funcao}</span></td>
                         <td><span class="_buttons">
                             <button class="view" onclick="view("${e.id}")"><i class="far fa-eye"></i></button> 
-                            <button class="edit" onclick="edit('${e.id}')"><i class="fas fa-pen"></i></button> 
                             <button class="destroy" onclick="destroy('${e.id}')"><i class="fas fa-trash"></i></button>
                         </span></td>
                     </tr>
@@ -192,9 +189,85 @@
                     notification(response.data.message, true)
                     
                 })
-                .catch(error => {
-                    notification(error.response.data.message, false)
+                .catch(error => notification(error.response.data.message, false))
+        }
+
+        const view = (id) => {
+            window.location.href = `${LOCATION}/#view-employee`
+            var output;
+            const MODAL_VIEWER = document.getElementById("modal-viewer")
+
+            axios.get(`${LOCATION}/api/v1/encargos/${id}`)
+                .then(response => {
+                    const e = response.data.data
+
+                    output = `
+                    <a href="#" class="close"><i class="fas fa-times-circle"></i></a>
+                    <h1>${e.funcionario} <span class="pro">${e.funcao}</span></h1>
+                    <form">
+                        <div class="grid-forms">
+                            <div class="flex-forms">
+                                <label for="current_proventos">Salário</label>
+                                <input type="text" id="current_proventos" value='${e.proventos}'>
+                            </div>
+                            <table>
+                                <tr>
+                                    <td>INSS</td>
+                                    <td>${(e.inss).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</td>
+                                </tr>
+                                <tr>
+                                    <td>SAT/RAT</td>
+                                    <td>${(e.sat_rat).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</td>
+                                </tr>
+                                <tr>
+                                    <td>Salário Educação</td>
+                                    <td>${(e.salario_educacao).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</td>
+                                </tr>
+                                <tr>
+                                    <td>Sistema S</td>
+                                    <td>${(e.sistema_s).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</td>
+                                </tr>
+                                <tr>
+                                    <td>Férias e Abono</td>
+                                    <td>${(e.ferias_e_abono).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</td>
+                                </tr>
+                                <tr>
+                                    <td>FGTS</td>
+                                    <td>${(e.fgts).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</td>
+                                </tr>
+                                <tr>
+                                    <td>13° Salário</td>
+                                    <td>${(e.decimo_terceiro).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</td>
+                                </tr>
+                                <tr>
+                                    <td>Descanso Semanal Remunerado</td>
+                                    <td>${(e.descanso_semanal_remunerado).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total de Encargos com Sálario</td>
+                                    <td>${(e.total_de_encargos_com_salario).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="buttons-modal">
+                            <button class="buttons dark-blue" onclick="update('${e.id}')"><i class="fas fa-pen"></i> Atualizar</button>
+                        </div>
+                    </form>
+                    `
+                    
+                    MODAL_VIEWER.innerHTML = output
                 })
+                .catch(error => notification(error.response.data.message, false))
+        }
+
+        const update = (id) => {
+            const proventos = Number(document.getElementById("current_proventos").value)
+
+            axios.put(`${LOCATION}/api/v1/encargos/${id}`, { proventos })
+                .then(response => notification(response.data.message, true))
+                .catch(error => notification(error.response.data.message, false))
+
+            // window.location.href = `${LOCATION}/`
         }
     </script>
 </body>
